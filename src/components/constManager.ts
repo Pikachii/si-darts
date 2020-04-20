@@ -133,7 +133,18 @@ export const menu: {
   },
   Cricket: {
     title: 'Cricket',
-    disabled: true,
+    menuItems: {
+      'standard-cricket': {
+        title: 'Standard Cricket',
+      },
+      'random-number-cricket': {
+        title: 'Random Number Cricket',
+      },
+      'hidden-cricket': {
+        title: 'Hidden Cricket',
+        disabled: true,
+      },
+    },
   },
   Party: {
     title: 'Party',
