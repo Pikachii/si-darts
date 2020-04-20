@@ -18,7 +18,7 @@ export default class PlayerCardListWithPoint extends Vue {
   public readonly points!: number[];
   @Prop({ default: 0 })
   public readonly currentPlayer!: number;
-  @Prop({ default: 0 })
+  @Prop({ default: 'max' })
   public readonly isTop!: 'max' | 'min';
 
   private readonly color: string[] = [

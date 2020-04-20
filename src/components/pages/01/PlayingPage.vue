@@ -2,7 +2,7 @@
   <div class="wrapper">
     <el-row>
       <el-col :span="4">
-        <div class="game-detail">Count Up</div>
+        <div class="game-detail">{{ gameTitle }}</div>
         <div class="margin-top game-detail">
           Round {{ currentRound }} / {{ totalRound }}
         </div>

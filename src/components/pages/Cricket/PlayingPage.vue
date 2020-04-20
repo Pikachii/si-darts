@@ -16,7 +16,7 @@
       <el-col :span="16">
         <div class="center-content">
           <div class="content">
-            <div :class="playerNum >= 3 ? 'cell' : 'cell none'">
+            <div :class="playerNum >= 3 ? 'cell player1' : 'cell player1 none'">
               <template v-if="playerNum >= 3">
                 <div
                   v-for="(mark, index) in cricketMarks[0]"
@@ -30,7 +30,7 @@
                 </div>
               </template>
             </div>
-            <div class="cell">
+            <div :class="playerNum >= 3 ? 'cell player2' : 'cell player1'">
               <div
                 v-for="(mark, index) in cricketMarks[playerNum >= 3 ? 1 : 0]"
                 :key="index"
@@ -51,7 +51,15 @@
                 {{ item.number }}
               </div>
             </div>
-            <div :class="playerNum >= 2 ? 'cell' : 'cell none'">
+            <div
+              :class="
+                playerNum === 1
+                  ? 'cell none'
+                  : playerNum >= 3
+                  ? 'cell player3'
+                  : 'cell player2'
+              "
+            >
               <template v-if="playerNum >= 2">
                 <div
                   v-for="(mark, index) in cricketMarks[playerNum >= 3 ? 2 : 1]"
@@ -65,7 +73,7 @@
                 </div>
               </template>
             </div>
-            <div :class="playerNum >= 4 ? 'cell' : 'cell none'">
+            <div :class="playerNum >= 4 ? 'cell player4' : 'cell none'">
               <template v-if="playerNum >= 4">
                 <div
                   v-for="(mark, index) in cricketMarks[3]"
@@ -605,8 +613,28 @@ export default class PlayingPage extends Vue {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      border: 1px solid black;
+      border: 3px solid black;
       border-radius: 10px;
+
+      &.player1 {
+        border-color: #ff6969;
+        color: #ff6969;
+      }
+
+      &.player2 {
+        border-color: #6ec4ff;
+        color: #6ec4ff;
+      }
+
+      &.player3 {
+        border-color: #f9bf4b;
+        color: #f9bf4b;
+      }
+
+      &.player4 {
+        border-color: #44d37e;
+        color: #44d37e;
+      }
 
       &.none {
         background-color: transparent;
