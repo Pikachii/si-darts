@@ -101,7 +101,7 @@
         </div>
       </el-col>
       <player-change-dialog ref="dialog" />
-      <game-start-dialog ref="gameStartDialog" game-title="Count Up" />
+      <game-start-dialog ref="gameStartDialog" :game-title="gameTitle" />
     </el-row>
   </div>
 </template>
