@@ -5,7 +5,7 @@
 <script lang="ts">
 import { Component, Vue, Getter, Mutation } from 'nuxt-property-decorator';
 
-import { imgCountUp } from '~/assets/imageCatalog';
+import { imgRandomNumberCricket } from '~/assets/imageCatalog';
 
 import MenuPage from '~/components/pages/MenuPage.vue';
 @Component({
@@ -29,7 +29,7 @@ export default class extends Vue {
     return {
       titleLabel: 'Random Number Cricket',
       description: '陣地を取って、相手よりも多く得点しよう',
-      imgSrc: imgCountUp,
+      imgSrc: imgRandomNumberCricket,
     };
   }
 }

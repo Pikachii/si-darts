@@ -39,7 +39,7 @@ export default class extends Vue {
       arr[j] = t;
     }
 
-    this.cricketNumbers = [...arr.slice(0, 5)];
+    this.cricketNumbers = [...arr.slice(0, 6)];
     this.cricketNumbers.sort((a, b) => a - b);
   }
 

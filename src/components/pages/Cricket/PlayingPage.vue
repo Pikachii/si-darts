@@ -101,7 +101,7 @@
         </div>
       </el-col>
       <player-change-dialog ref="dialog" />
-      <game-start-dialog ref="gameStartDialog" game-title="Count Up" />
+      <game-start-dialog ref="gameStartDialog" :game-title="gameTitle" />
     </el-row>
   </div>
 </template>
@@ -289,6 +289,7 @@ export default class PlayingPage extends Vue {
           const area = keyBind[e.key].split(' ');
           if (area[1] === 'Bull') {
             if (
+              this.playerNum !== 1 &&
               this.cricketMarks.every(
                 x => x[this.playerCricketMarks.length - 1] === 3
               )
@@ -303,6 +304,7 @@ export default class PlayingPage extends Vue {
                 this.roundMarks[this.currentRound - 1][this.currentThrow - 1] =
                   '／';
                 if (
+                  this.playerNum !== 1 &&
                   this.cricketMarks
                     .filter((_x, index) => index !== this.currentPlayer - 1)
                     .every(x => x[this.playerCricketMarks.length - 1] >= 3) &&
@@ -324,6 +326,7 @@ export default class PlayingPage extends Vue {
                   this.playerCricketMarks.length - 1
                 ] += 2;
                 if (
+                  this.playerNum !== 1 &&
                   this.cricketMarks
                     .filter((_x, index) => index !== this.currentPlayer - 1)
                     .every(x => x[this.playerCricketMarks.length - 1] >= 3) &&
@@ -345,6 +348,7 @@ export default class PlayingPage extends Vue {
                   ] = '×';
 
                   if (
+                    this.playerNum !== 1 &&
                     this.playerCricketMarks[
                       this.playerCricketMarks.length - 1
                     ] === 3
@@ -388,7 +392,10 @@ export default class PlayingPage extends Vue {
               const sound = new Audio(soundMissShot);
               sound.play();
             } else {
-              if (this.cricketMarks.every(x => x[pointIndex] === 3)) {
+              if (
+                this.playerNum !== 1 &&
+                this.cricketMarks.every(x => x[pointIndex] === 3)
+              ) {
                 const sound = new Audio(soundMissShot);
                 sound.play();
               } else if (area[0] === 'Single') {
@@ -396,6 +403,7 @@ export default class PlayingPage extends Vue {
                   '／';
                 this.playerCricketMarks[pointIndex] += 1;
                 if (
+                  this.playerNum !== 1 &&
                   this.cricketMarks
                     .filter((_x, index) => index !== this.currentPlayer - 1)
                     .every(x => x[pointIndex] >= 3) &&
@@ -411,6 +419,7 @@ export default class PlayingPage extends Vue {
               } else if (area[0] === 'Double') {
                 this.playerCricketMarks[pointIndex] += 2;
                 if (
+                  this.playerNum !== 1 &&
                   this.cricketMarks
                     .filter((_x, index) => index !== this.currentPlayer - 1)
                     .every(x => x[pointIndex] >= 3) &&
@@ -428,6 +437,7 @@ export default class PlayingPage extends Vue {
                   ] = '×';
 
                   if (
+                    this.playerNum !== 1 &&
                     this.cricketMarks
                       .filter((_x, index) => index !== this.currentPlayer - 1)
                       .every(x => x[pointIndex] >= 3) &&
@@ -447,6 +457,7 @@ export default class PlayingPage extends Vue {
               } else if (area[0] === 'Triple') {
                 this.playerCricketMarks[pointIndex] += 3;
                 if (
+                  this.playerNum !== 1 &&
                   this.cricketMarks
                     .filter((_x, index) => index !== this.currentPlayer - 1)
                     .every(x => x[pointIndex] >= 3) &&
@@ -459,6 +470,7 @@ export default class PlayingPage extends Vue {
                   sound.play();
                   this.cricketNumberStatus[pointIndex].isClose = true;
                 } else if (
+                  this.playerNum !== 1 &&
                   this.cricketMarks
                     .filter((_x, index) => index !== this.currentPlayer - 1)
                     .every(x => x[pointIndex] >= 3) &&
@@ -476,6 +488,7 @@ export default class PlayingPage extends Vue {
                   ] = '⊗';
 
                   if (
+                    this.playerNum !== 1 &&
                     this.cricketMarks
                       .filter((_x, index) => index !== this.currentPlayer - 1)
                       .every(x => x[pointIndex] >= 3) &&

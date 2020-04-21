@@ -7,6 +7,8 @@ import img1501 from './img/1501.png';
 import imgBackground from './img/background.jpg';
 import imgCountUp from './img/count-up.png';
 import imgLogo from './img/logo.png';
+import imgRandomNumberCricket from './img/randam-number-cricket.png';
+import imgStandardCricket from './img/standard-cricket.png';
 
 export {
   img301,
@@ -18,4 +20,6 @@ export {
   imgBackground,
   imgCountUp,
   imgLogo,
+  imgRandomNumberCricket,
+  imgStandardCricket,
 };
