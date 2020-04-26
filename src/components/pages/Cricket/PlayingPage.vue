@@ -79,9 +79,10 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
   public created() {
     this.keyDownCallbacks = this.generateKeyDownCallbacks();
 
-    this.cricketNumberStatus = this.cricketNumbers
-      .map(x => ({ number: `${x}`, isClose: false }))
-      .concat([{ number: 'Bull', isClose: false }]);
+    this.cricketNumberStatus = this.cricketNumbers.map(x => ({
+      number: x === 21 ? 'Bull' : `${x}`,
+      isClose: false,
+    }));
 
     for (let i = 1; i <= this.playerNum; i++) {
       this.allPlayerRoundMarks.push(
@@ -353,7 +354,7 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
             this.setRoundMarks('／');
 
             return {
-              sound: soundBullShot,
+              sound: soundCricketHit,
               result: key,
               isEnd: this.isEnd,
             };
@@ -389,7 +390,7 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
             this.setRoundMarks('／');
 
             return {
-              sound: soundBullShot,
+              sound: soundCricketHit,
               result: key,
               isEnd: this.isEnd,
             };

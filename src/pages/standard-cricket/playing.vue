@@ -15,7 +15,7 @@ export default class extends mixins<BasePage>(BasePage) {
   private get vbPlayingPage(): Partial<PlayingPage> {
     return {
       playerNum: this.playerNum,
-      cricketNumbers: [20, 19, 18, 17, 16, 15],
+      cricketNumbers: [20, 19, 18, 17, 16, 15, 21],
       totalRound: 15,
       gameTitle: 'Standard Cricket',
     };

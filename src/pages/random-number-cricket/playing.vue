@@ -12,10 +12,9 @@ import PlayingPage from '~/components/pages/Cricket/PlayingPage.vue';
   components: { PlayingPage },
 })
 export default class extends mixins<BasePage>(BasePage) {
-  private cricketNumbers: number[];
+  private cricketNumbers: number[] = [];
 
-  constructor() {
-    super();
+  public created() {
     const arr = Array.from(Array(20)).map((_x, index) => index + 1);
     let a = arr.length;
     // シャッフルアルゴリズム
@@ -26,7 +25,8 @@ export default class extends mixins<BasePage>(BasePage) {
       arr[j] = t;
     }
 
-    this.cricketNumbers = [...arr.slice(0, 6)];
+    // Bullは必ず最後に設定する
+    this.cricketNumbers = [...arr.slice(0, 6)].concat([21]);
     this.cricketNumbers.sort((a, b) => a - b);
   }
 
