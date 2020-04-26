@@ -54,6 +54,8 @@ import {
 export default class PlayingPage extends mixins<BasePage>(BasePage) {
   @Prop({ default: () => [] })
   public readonly cricketNumbers!: number[];
+  @Prop({ default: false })
+  public readonly isHidden!: boolean;
 
   @Ref('dialog')
   private readonly dialog!: PlayerChangeDialog;
@@ -126,7 +128,14 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
 
   private get vbCricketDisplay(): Partial<CricketDisplay> {
     return {
-      numbers: this.cricketNumberStatus,
+      numbers: this.cricketNumberStatus.map((x, index) => ({
+        number: this.isHidden
+          ? this.allPlayerCricketNumberMarks.some(x => x[index] > 0)
+            ? x.number
+            : '???'
+          : x.number,
+        isClose: x.isClose,
+      })),
       allPlayerMarks: this.allPlayerCricketNumberMarks,
       playerNum: this.playerNum,
     };
@@ -168,7 +177,15 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
     cricketNumber: number
   ) {
     const targetMarks = this.currentPlayerCricketNumberMarks[targetIndex];
-    if (this.currentPlayerCricketNumberMarks[targetIndex] <= 3) return;
+    if (
+      this.currentPlayerCricketNumberMarks[targetIndex] <= 3 ||
+      this.allPlayerCricketNumberMarks.every(
+        (x, index) =>
+          index === targetPlayer ||
+          (index !== targetPlayer && x[targetIndex] === 3)
+      )
+    )
+      return;
 
     this.currentPlayerCricketNumberMarks.splice(targetIndex, 1, 3);
     const point = cricketNumber * (targetMarks - 3);
@@ -248,8 +265,8 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
       },
       onSingleBull: (key: string) => {
         try {
-          const index = this.currentPlayerCricketNumberMarks.length - 1;
-          if (this.isClosed(index)) {
+          const index = this.cricketNumbers.findIndex(x => x === 21);
+          if (index < 0 || this.isClosed(index)) {
             return {
               sound: soundMissShot,
               result: key,
@@ -257,12 +274,20 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
           }
 
           const count = this.currentPlayerCricketNumberMarks[index];
-          this.currentPlayerCricketNumberMarks.splice(index, 1, count + 1);
+          if (
+            this.isHidden &&
+            this.allPlayerCricketNumberMarks.every(x => x[index] === 0)
+          ) {
+            this.currentPlayerCricketNumberMarks.splice(index, 1, count + 2);
+          } else {
+            this.currentPlayerCricketNumberMarks.splice(index, 1, count + 1);
+          }
           this.addPoint(this.currentPlayerIndex, index, 25);
 
           if (this.isClosing(index, 3)) {
             this.setRoundMarks('／');
 
+            this.currentPlayerCricketNumberMarks.splice(index, 1, 3);
             this.cricketNumberStatus[index].isClose = true;
             return {
               sound: soundCricketClose,
@@ -284,8 +309,8 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
       },
       onDoubleBull: (key: string) => {
         try {
-          const index = this.currentPlayerCricketNumberMarks.length - 1;
-          if (this.isClosed(index)) {
+          const index = this.cricketNumbers.findIndex(x => x === 21);
+          if (index < 0 || this.isClosed(index)) {
             return {
               sound: soundMissShot,
               result: key,
@@ -293,12 +318,20 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
           }
 
           const count = this.currentPlayerCricketNumberMarks[index];
-          this.currentPlayerCricketNumberMarks.splice(index, 1, count + 2);
+          if (
+            this.isHidden &&
+            this.allPlayerCricketNumberMarks.every(x => x[index] === 0)
+          ) {
+            this.currentPlayerCricketNumberMarks.splice(index, 1, count + 3);
+          } else {
+            this.currentPlayerCricketNumberMarks.splice(index, 1, count + 2);
+          }
           this.addPoint(this.currentPlayerIndex, index, 25);
 
           if (this.isClosing(index, 4)) {
             this.setRoundMarks('／');
 
+            this.currentPlayerCricketNumberMarks.splice(index, 1, 3);
             this.cricketNumberStatus[index].isClose = true;
             return {
               sound: soundCricketClose,
@@ -308,6 +341,7 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
           } else if (this.isClosing(index, 3)) {
             this.setRoundMarks('×');
 
+            this.currentPlayerCricketNumberMarks.splice(index, 1, 3);
             this.cricketNumberStatus[index].isClose = true;
             return {
               sound: soundCricketClose,
@@ -338,12 +372,20 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
           }
 
           const count = this.currentPlayerCricketNumberMarks[index];
-          this.currentPlayerCricketNumberMarks.splice(index, 1, count + 1);
+          if (
+            this.isHidden &&
+            this.allPlayerCricketNumberMarks.every(x => x[index] === 0)
+          ) {
+            this.currentPlayerCricketNumberMarks.splice(index, 1, count + 2);
+          } else {
+            this.currentPlayerCricketNumberMarks.splice(index, 1, count + 1);
+          }
           this.addPoint(this.currentPlayerIndex, index, point);
 
           if (this.isClosing(index, 3)) {
             this.setRoundMarks('／');
 
+            this.currentPlayerCricketNumberMarks.splice(index, 1, 3);
             this.cricketNumberStatus[index].isClose = true;
             return {
               sound: soundCricketClose,
@@ -374,12 +416,20 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
           }
 
           const count = this.currentPlayerCricketNumberMarks[index];
-          this.currentPlayerCricketNumberMarks.splice(index, 1, count + 1);
+          if (
+            this.isHidden &&
+            this.allPlayerCricketNumberMarks.every(x => x[index] === 0)
+          ) {
+            this.currentPlayerCricketNumberMarks.splice(index, 1, count + 2);
+          } else {
+            this.currentPlayerCricketNumberMarks.splice(index, 1, count + 1);
+          }
           this.addPoint(this.currentPlayerIndex, index, point);
 
           if (this.isClosing(index, 3)) {
             this.setRoundMarks('／');
 
+            this.currentPlayerCricketNumberMarks.splice(index, 1, 3);
             this.cricketNumberStatus[index].isClose = true;
             return {
               sound: soundCricketClose,
@@ -410,12 +460,20 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
           }
 
           const count = this.currentPlayerCricketNumberMarks[index];
-          this.currentPlayerCricketNumberMarks.splice(index, 1, count + 2);
+          if (
+            this.isHidden &&
+            this.allPlayerCricketNumberMarks.every(x => x[index] === 0)
+          ) {
+            this.currentPlayerCricketNumberMarks.splice(index, 1, count + 3);
+          } else {
+            this.currentPlayerCricketNumberMarks.splice(index, 1, count + 2);
+          }
           this.addPoint(this.currentPlayerIndex, index, point);
 
           if (this.isClosing(index, 4)) {
             this.setRoundMarks('／');
 
+            this.currentPlayerCricketNumberMarks.splice(index, 1, 3);
             this.cricketNumberStatus[index].isClose = true;
             return {
               sound: soundCricketClose,
@@ -425,6 +483,7 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
           } else if (this.isClosing(index, 3)) {
             this.setRoundMarks('×');
 
+            this.currentPlayerCricketNumberMarks.splice(index, 1, 3);
             this.cricketNumberStatus[index].isClose = true;
             return {
               sound: soundCricketClose,
@@ -458,12 +517,20 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
           }
 
           const count = this.currentPlayerCricketNumberMarks[index];
-          this.currentPlayerCricketNumberMarks.splice(index, 1, count + 3);
+          if (
+            this.isHidden &&
+            this.allPlayerCricketNumberMarks.every(x => x[index] === 0)
+          ) {
+            this.currentPlayerCricketNumberMarks.splice(index, 1, count + 4);
+          } else {
+            this.currentPlayerCricketNumberMarks.splice(index, 1, count + 3);
+          }
           this.addPoint(this.currentPlayerIndex, index, point);
 
           if (this.isClosing(index, 5)) {
             this.setRoundMarks('／');
 
+            this.currentPlayerCricketNumberMarks.splice(index, 1, 3);
             this.cricketNumberStatus[index].isClose = true;
             return {
               sound: soundCricketClose,
@@ -473,6 +540,7 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
           } else if (this.isClosing(index, 4)) {
             this.setRoundMarks('×');
 
+            this.currentPlayerCricketNumberMarks.splice(index, 1, 3);
             this.cricketNumberStatus[index].isClose = true;
             return {
               sound: soundCricketClose,
@@ -482,6 +550,7 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
           } else if (this.isClosing(index, 3)) {
             this.setRoundMarks('⊗');
 
+            this.currentPlayerCricketNumberMarks.splice(index, 1, 3);
             this.cricketNumberStatus[index].isClose = true;
             return {
               sound: soundCricketClose,
