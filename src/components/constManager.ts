@@ -144,7 +144,6 @@ export const menu: {
       },
       'hidden-cricket': {
         title: 'Hidden Cricket',
-        disabled: true,
       },
     },
   },
