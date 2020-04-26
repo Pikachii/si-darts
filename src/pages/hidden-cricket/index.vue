@@ -5,7 +5,7 @@
 <script lang="ts">
 import { mixins } from 'nuxt-property-decorator';
 
-import { imgRandomNumberCricket } from '~/assets/imageCatalog';
+import { imgHiddenCricket } from '~/assets/imageCatalog';
 
 import BasePage from '~/components/pages/ContainerBase/MenuBasePage';
 import MenuPage from '~/components/pages/MenuPage.vue';
@@ -15,7 +15,7 @@ export default class extends mixins<BasePage>(BasePage) {
     return {
       titleLabel: 'Hidden Cricket',
       description: '陣地を取って、相手よりも多く得点しよう',
-      imgSrc: imgRandomNumberCricket,
+      imgSrc: imgHiddenCricket,
     };
   }
 }
