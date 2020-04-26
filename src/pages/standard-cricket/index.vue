@@ -3,28 +3,14 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Getter, Mutation } from 'nuxt-property-decorator';
+import { mixins } from 'nuxt-property-decorator';
 
 import { imgStandardCricket } from '~/assets/imageCatalog';
 
+import BasePage from '~/components/pages/ContainerBase/MenuBasePage';
 import MenuPage from '~/components/pages/MenuPage.vue';
-@Component({
-  components: { MenuPage },
-})
-export default class extends Vue {
-  @Getter('playerNum')
-  private readonly playerNum!: number;
 
-  @Mutation('setPlayerNum')
-  private setPlayerNum!: (playerNum: number) => void;
-
-  private get vmPlayerNum(): number {
-    return this.playerNum;
-  }
-  private set vmPlayerNum(playerNum: number) {
-    this.setPlayerNum(playerNum);
-  }
-
+export default class extends mixins<BasePage>(BasePage) {
   private get vbMenuPage(): Partial<MenuPage> {
     return {
       titleLabel: 'Standard Cricket',

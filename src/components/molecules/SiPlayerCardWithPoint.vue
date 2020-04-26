@@ -33,7 +33,6 @@ export default class SiPlayerCardWithPoint extends Vue {
       bodyStyle: {
         width: '150px',
         textAlign: 'center',
-        height: '60px',
         backgroundColor: this.color,
       },
       shadow: 'never',

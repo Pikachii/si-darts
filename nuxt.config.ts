@@ -22,7 +22,7 @@ const config: Configuration = {
   /*
    ** Global CSS
    */
-  css: ['element-ui/lib/theme-chalk/index.css'],
+  css: ['element-ui/lib/theme-chalk/index.css', '~/assets/style/app.scss'],
   /*
    ** Plugins to load before mounting the App
    */

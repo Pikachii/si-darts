@@ -21,7 +21,6 @@ export default class SiPlayerCard extends Vue {
       bodyStyle: {
         width: '150px',
         textAlign: 'center',
-        height: '60px',
         backgroundColor: this.color,
       },
       shadow: 'always',
