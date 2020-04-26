@@ -2,29 +2,16 @@
   <playing-page v-bind="vbPlayingPage" />
 </template>
 <script lang="ts">
-import { Component, Vue, Getter, Mutation } from 'nuxt-property-decorator';
-import { Context } from '@nuxt/types';
+import { Component, mixins } from 'nuxt-property-decorator';
 
+import BasePage from '~/components/pages/ContainerBase/PlayingBasePage';
 import PlayingPage from '~/components/pages/Cricket/PlayingPage.vue';
 
 @Component({
   layout: 'playing',
   components: { PlayingPage },
 })
-export default class extends Vue {
-  public fetch({ store, redirect }: Context) {
-    const playerNum = store.getters['playerNum'];
-    if (playerNum === 0) {
-      redirect(200, '/');
-    }
-  }
-
-  @Getter('playerNum')
-  private readonly playerNum!: number;
-
-  @Mutation('setPlayerNum')
-  private setPlayerNum!: (playerNum: number) => void;
-
+export default class extends mixins<BasePage>(BasePage) {
   private cricketNumbers: number[];
 
   constructor() {
@@ -41,10 +28,6 @@ export default class extends Vue {
 
     this.cricketNumbers = [...arr.slice(0, 6)];
     this.cricketNumbers.sort((a, b) => a - b);
-  }
-
-  public destroyed() {
-    this.setPlayerNum(0);
   }
 
   private get vbPlayingPage(): Partial<PlayingPage> {

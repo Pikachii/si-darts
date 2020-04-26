@@ -41,3 +41,39 @@ export interface SiCarouselItemOption {
   readonly name: string;
   readonly label?: string;
 }
+
+export interface SiCricketNumberStatus {
+  readonly number: string;
+  isClose: boolean;
+}
+
+export interface RoundInfo {
+  round: number;
+  point: string;
+}
+
+export interface RoundMultiInfo {
+  round: number;
+  points: string[];
+}
+
+export interface KeyDownCallbacks {
+  readonly showDialog: () => void;
+  readonly hideDialog: () => void;
+  readonly onChangeRound: (nextRound: number, nextPlayer: number) => void;
+  readonly onSingleBull: (key: string) => DartResultProperty;
+  readonly onDoubleBull: (key: string) => DartResultProperty;
+  readonly onTriple: (key: string, point: number) => DartResultProperty;
+  readonly onDouble: (key: string, point: number) => DartResultProperty;
+  readonly onOuterSingle: (key: string, point: number) => DartResultProperty;
+  readonly onInnerSingle: (key: string, point: number) => DartResultProperty;
+}
+
+export interface DartResultProperty {
+  readonly sound: any;
+  readonly soundTimes?: number;
+  readonly soundSpanMs?: number;
+  readonly result: string;
+  readonly isNextTurn?: boolean;
+  readonly isEnd?: boolean;
+}

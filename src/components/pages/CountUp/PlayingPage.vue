@@ -2,16 +2,7 @@
   <div class="wrapper">
     <el-row>
       <el-col :span="4">
-        <div class="game-detail">Count Up</div>
-        <div class="margin-top game-detail">
-          Round {{ currentRound }} / {{ totalRound }}
-        </div>
-        <div v-for="(item, index) in roundPoints" :key="index">
-          <el-row>
-            <el-col :span="6" class="round-num"> R{{ index + 1 }} </el-col>
-            <el-col :span="18" class="round-detail"> {{ item }} </el-col>
-          </el-row>
-        </div>
+        <playing-left-content v-bind="vbPlayingLeftContent" />
       </el-col>
       <el-col :span="16">
         <div class="center-content">
@@ -20,60 +11,51 @@
         </div>
       </el-col>
       <el-col :span="4">
-        <div class="game-detail">Result</div>
-        <div v-for="(item, index) in roundThrow" :key="index">
-          <el-row>
-            <el-col :span="4" class="round-num"> {{ index + 1 }} </el-col>
-            <el-col :span="20" class="round-detail"> {{ item }} </el-col>
-          </el-row>
-        </div>
+        <si-round-throw v-bind="vbRoundThrow" />
       </el-col>
       <player-change-dialog ref="dialog" />
-      <game-start-dialog ref="gameStartDialog" game-title="Count Up" />
+      <game-start-dialog ref="gameStartDialog" :game-title="gameTitle" />
     </el-row>
   </div>
 </template>
 <script lang="ts">
-import { Component, Vue, Prop, Ref } from 'nuxt-property-decorator';
+import { Component, mixins, Ref } from 'nuxt-property-decorator';
 
+import { SiRoundThrow } from '~/components/moleculesCatalog';
+import BasePage from '~/components/pages/ComponentBase/PlayingBaseComponent';
+import PlayingLeftContent from '~/components/organism/PlayingLeftContent.vue';
 import PlayerCardListWithPoint from '~/components/organism/PlayerCardListWithPoint.vue';
 import PlayerChangeDialog from '~/components/organism/PlayerChangeDialog.vue';
 import GameStartDialog from '~/components/organism/GameStartDialog.vue';
-import { keyBind } from '~/components/constManager';
-import { sleep } from '~/utils/commonUtil';
+import { KeyDownCallbacks } from '~/components/interfaceManager';
 
 import {
-  soundStart,
-  soundThrowStart,
-  soundChange,
   soundBullShot,
   soundInnerBullShot,
   soundNormalShot,
 } from '~/assets/soundCatalog';
 
 @Component({
-  components: { PlayerCardListWithPoint, PlayerChangeDialog, GameStartDialog },
+  components: {
+    SiRoundThrow,
+    PlayerCardListWithPoint,
+    PlayerChangeDialog,
+    PlayingLeftContent,
+    GameStartDialog,
+  },
 })
-export default class PlayingPage extends Vue {
-  @Prop({ default: 1 })
-  public readonly playerNum!: number;
-
+export default class PlayingPage extends mixins<BasePage>(BasePage) {
   @Ref('dialog')
   private readonly dialog!: PlayerChangeDialog;
   @Ref('gameStartDialog')
   private readonly gameStartDialog!: GameStartDialog;
 
-  private totalRound: number = 8;
-  private currentRound: number = 1;
-  private currentThrow: number = 1;
-  private currentPlayer: number = 1;
+  /**  */
+  private points: number[][] = [];
+  private roundPoints: number[] = [];
 
-  private points: number[][];
-  private roundPoints: number[];
-  private roundThrow: string[] = Array(3).fill('');
-
-  constructor() {
-    super();
+  public created() {
+    this.keyDownCallbacks = this.generateKeyDownCallbacks();
 
     this.points = [];
     for (let i = 1; i <= this.playerNum; i++) {
@@ -82,123 +64,117 @@ export default class PlayingPage extends Vue {
     this.roundPoints = [...this.points[0]];
   }
 
-  public created() {
-    if (this.playerNum === 0) this.$router.push('/');
-  }
-
-  public async mounted() {
-    this.gameStartDialog.show();
-    const sound = new Audio(soundStart);
-    await sound.play();
-    sound.addEventListener('ended', _e => {
-      this.gameStartDialog.hide();
-      document.addEventListener('keydown', this.keyDownEvent);
-      const sound2 = new Audio(soundThrowStart);
-      sound2.play();
+  public mounted() {
+    this.$nextTick(async () => {
+      await this.showStartDialog(
+        this.gameStartDialog.show,
+        this.gameStartDialog.hide
+      );
     });
   }
 
-  public destroyed() {
-    document.removeEventListener('keydown', this.keyDownEvent);
+  private get vbPlayingLeftContent(): Partial<PlayingLeftContent> {
+    return {
+      gameTitle: this.gameTitle,
+      currentRound: this.currentRound,
+      totalRound: this.totalRound,
+      roundItems: this.roundPoints.map((x, index) => ({
+        round: index + 1,
+        point: `${x}`,
+      })),
+    };
+  }
+
+  private get vbRoundThrow(): Partial<SiRoundThrow> {
+    return {
+      roundThrow: this.roundThrow,
+    };
   }
 
   private get totalPoint(): number {
     return this.roundPoints.reduce((prev, current) => prev + current);
   }
 
-  private get pointsSum(): number[] {
-    return this.points.map(x => x.reduce((prev, current) => prev + current));
-  }
-
   private get vbPlayerCardListWithPoint(): Partial<PlayerCardListWithPoint> {
-    return { points: this.pointsSum, currentPlayer: this.currentPlayer };
+    return {
+      points: this.points.map(x => x.reduce((prev, current) => prev + current)),
+      currentPlayer: this.currentPlayer,
+    };
   }
 
-  private async keyDownEvent(e: KeyboardEvent) {
-    document.removeEventListener('keydown', this.keyDownEvent);
-    try {
-      if (e.key === 'Enter') {
-        if (
-          this.currentRound === this.totalRound &&
-          this.currentPlayer === this.playerNum
-        ) {
-          this.$router.push('/');
-          return;
-        } else {
-          const sound = new Audio(soundChange);
-          sound.play();
-          if (this.dialog) {
-            this.dialog.show();
-            await sleep(3000);
-            this.dialog.hide();
-          }
-          this.points[this.currentPlayer - 1] = [...this.roundPoints];
-          this.points = [...this.points];
-          if (this.currentPlayer === this.playerNum) {
-            this.currentRound++;
-            this.currentPlayer = 1;
-          } else {
-            this.currentPlayer++;
-          }
-          this.roundPoints = [...this.points[this.currentPlayer - 1]];
-          this.currentThrow = 1;
-          this.roundThrow = Array(3).fill('');
-        }
-        const sound = new Audio(soundThrowStart);
-        sound.play();
-        return;
-      } else if (e.key === 'Escape') {
-        this.$router.push('/');
-        return;
-      }
-
-      if (this.currentThrow <= 3) {
-        if (Object.keys(keyBind).includes(e.key)) {
-          this.roundThrow[this.currentThrow - 1] = keyBind[e.key];
-          this.roundThrow = [...this.roundThrow];
-          this.currentThrow++;
-
-          const area = keyBind[e.key].split(' ');
-          if (area[1] === 'Bull') {
-            if (area[0] === 'Single') {
-              const sound = new Audio(soundBullShot);
-              sound.play();
-            } else if (area[0] === 'Double') {
-              const sound = new Audio(soundInnerBullShot);
-              sound.play();
-            }
-            this.roundPoints[this.currentRound - 1] += 50;
-          } else {
-            const point = Number(area[1]);
-            const sound = new Audio(soundNormalShot);
-            if (area[0] === 'Single') {
-              sound.play();
-              this.roundPoints[this.currentRound - 1] += point;
-            } else if (area[0] === 'Double') {
-              sound.play();
-              await sleep(100);
-              sound.currentTime = 0;
-              sound.play();
-              this.roundPoints[this.currentRound - 1] += point * 2;
-            } else if (area[0] === 'Triple') {
-              sound.play();
-              await sleep(100);
-              sound.currentTime = 0;
-              sound.play();
-              await sleep(100);
-              sound.currentTime = 0;
-              sound.play();
-              this.roundPoints[this.currentRound - 1] += point * 3;
-            }
-          }
-          this.roundPoints = [...this.roundPoints];
-          this.points[this.currentPlayer - 1] = [...this.roundPoints];
-          this.points = [...this.points];
-        }
-      }
-    } finally {
-      document.addEventListener('keydown', this.keyDownEvent);
-    }
+  private generateKeyDownCallbacks(): KeyDownCallbacks {
+    return {
+      showDialog: () => {
+        if (this.dialog) this.dialog.show();
+      },
+      hideDialog: () => {
+        if (this.dialog) this.dialog.hide();
+      },
+      onChangeRound: (nextRound, nextPlayer) => {
+        this.points.splice(nextPlayer - 1, 1, this.roundPoints);
+        this.roundPoints = [...this.points[nextPlayer]];
+      },
+      onSingleBull: (key: string) => {
+        const currentPoint = this.roundPoints[this.currentRoundIndex] + 50;
+        this.roundPoints.splice(this.currentRoundIndex, 1, currentPoint);
+        this.points.splice(this.currentPlayerIndex, 1, [...this.roundPoints]);
+        return {
+          sound: soundBullShot,
+          result: key,
+        };
+      },
+      onDoubleBull: (key: string) => {
+        const currentPoint = this.roundPoints[this.currentRoundIndex] + 50;
+        this.roundPoints.splice(this.currentRoundIndex, 1, currentPoint);
+        this.points.splice(this.currentPlayerIndex, 1, [...this.roundPoints]);
+        return {
+          sound: soundInnerBullShot,
+          result: key,
+        };
+      },
+      onInnerSingle: (key: string, point: number) => {
+        const currentPoint = this.roundPoints[this.currentRoundIndex] + point;
+        this.roundPoints.splice(this.currentRoundIndex, 1, currentPoint);
+        this.points.splice(this.currentPlayerIndex, 1, [...this.roundPoints]);
+        return {
+          sound: soundNormalShot,
+          result: key,
+        };
+      },
+      onOuterSingle: (key: string, point: number) => {
+        const currentPoint = this.roundPoints[this.currentRoundIndex] + point;
+        this.roundPoints.splice(this.currentRoundIndex, 1, currentPoint);
+        this.points.splice(this.currentPlayerIndex, 1, [...this.roundPoints]);
+        return {
+          sound: soundNormalShot,
+          result: key,
+        };
+      },
+      onDouble: (key: string, point: number) => {
+        const currentPoint =
+          this.roundPoints[this.currentRoundIndex] + point * 2;
+        this.roundPoints.splice(this.currentRoundIndex, 1, currentPoint);
+        this.points.splice(this.currentPlayerIndex, 1, [...this.roundPoints]);
+        return {
+          sound: soundNormalShot,
+          result: key,
+          soundTimes: 2,
+          soundSpanMs: 100,
+        };
+      },
+      onTriple: (key: string, point: number) => {
+        const currentPoint =
+          this.roundPoints[this.currentRoundIndex] + point * 3;
+        this.roundPoints.splice(this.currentRoundIndex, 1, currentPoint);
+        this.points.splice(this.currentPlayerIndex, 1, [...this.roundPoints]);
+        return {
+          sound: soundNormalShot,
+          result: key,
+          soundTimes: 3,
+          soundSpanMs: 100,
+        };
+      },
+    };
   }
 }
 </script>
