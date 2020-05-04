@@ -254,30 +254,6 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
   background-image: url(~assets/img/background.jpg);
 }
 
-.game-detail {
-  text-align: center;
-  background-color: skyblue;
-  font-size: 2em;
-
-  &.margin-top {
-    margin-top: 5px;
-  }
-}
-
-.round-num {
-  text-align: center;
-  background-color: skyblue;
-  font-size: 1em;
-  height: 50px;
-}
-
-.round-detail {
-  text-align: center;
-  background-color: skyblue;
-  font-size: 2em;
-  height: 50px;
-}
-
 .center-content {
   align-items: center;
   display: flex;

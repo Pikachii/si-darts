@@ -32,6 +32,7 @@ import {
   SiCricketNumberStatus,
   KeyDownCallbacks,
 } from '~/components/interfaceManager';
+import { BULL_INDEX } from '~/components/constManager';
 
 import {
   soundBullShot,
@@ -82,7 +83,7 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
     this.keyDownCallbacks = this.generateKeyDownCallbacks();
 
     this.cricketNumberStatus = this.cricketNumbers.map(x => ({
-      number: x === 21 ? 'Bull' : `${x}`,
+      number: x === BULL_INDEX ? 'Bull' : `${x}`,
       isClose: false,
     }));
 
@@ -265,7 +266,7 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
       },
       onSingleBull: (key: string) => {
         try {
-          const index = this.cricketNumbers.findIndex(x => x === 21);
+          const index = this.cricketNumbers.findIndex(x => x === BULL_INDEX);
           if (index < 0 || this.isClosed(index)) {
             return {
               sound: soundMissShot,
@@ -309,7 +310,7 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
       },
       onDoubleBull: (key: string) => {
         try {
-          const index = this.cricketNumbers.findIndex(x => x === 21);
+          const index = this.cricketNumbers.findIndex(x => x === BULL_INDEX);
           if (index < 0 || this.isClosed(index)) {
             return {
               sound: soundMissShot,

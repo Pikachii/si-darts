@@ -6,7 +6,10 @@
       </el-col>
       <el-col :span="16">
         <div class="center-content">
-          <div class="content">{{ totalPoint }}</div>
+          <div class="content">
+            <div style="font-size: 0.25em;">Now ×{{ currentOpenAreas }}</div>
+            <shoot-out-darts-board v-bind="vbShootOutDartsBoard" />
+          </div>
           <player-card-list-with-point v-bind="vbPlayerCardListWithPoint" />
         </div>
       </el-col>
@@ -23,16 +26,19 @@ import { Component, mixins, Ref } from 'nuxt-property-decorator';
 
 import { SiRoundThrow } from '~/components/moleculesCatalog';
 import BasePage from '~/components/pages/ComponentBase/PlayingBaseComponent';
+import ShootOutDartsBoard from '~/components/organism/ShootOutDartsBoard.vue';
 import PlayingLeftContent from '~/components/organism/PlayingLeftContent.vue';
 import PlayerCardListWithPoint from '~/components/organism/PlayerCardListWithPoint.vue';
 import PlayerChangeDialog from '~/components/organism/PlayerChangeDialog.vue';
 import GameStartDialog from '~/components/organism/GameStartDialog.vue';
 import { KeyDownCallbacks } from '~/components/interfaceManager';
+import { BULL_INDEX } from '~/components/constManager';
 
 import {
   soundBullShot,
   soundInnerBullShot,
   soundNormalShot,
+  soundMissShot,
 } from '~/assets/soundCatalog';
 
 @Component({
@@ -41,6 +47,7 @@ import {
     PlayerCardListWithPoint,
     PlayerChangeDialog,
     PlayingLeftContent,
+    ShootOutDartsBoard,
     GameStartDialog,
   },
 })
@@ -50,18 +57,25 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
   @Ref('gameStartDialog')
   private readonly gameStartDialog!: GameStartDialog;
 
-  /**  */
   private points: number[][] = [];
   private roundPoints: number[] = [];
+  private hitNumbers: Set<number>[] = [];
+  private currentNumbers: Set<number> = new Set<number>();
+  private openAreas: number[] = [];
+  private currentOpenAreas: number = 0;
 
   public created() {
     this.keyDownCallbacks = this.generateKeyDownCallbacks();
 
     this.points = [];
     for (let i = 1; i <= this.playerNum; i++) {
+      this.openAreas.push(1);
+      this.hitNumbers.push(new Set<number>());
       this.points.push(Array.from(Array(this.totalRound).fill(0)));
     }
+    this.currentOpenAreas = this.openAreas[0];
     this.roundPoints = [...this.points[0]];
+    this.currentNumbers = this.hitNumbers[0];
   }
 
   public mounted() {
@@ -71,6 +85,31 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
         this.gameStartDialog.hide
       );
     });
+  }
+
+  private get vbShootOutDartsBoard(): Partial<ShootOutDartsBoard> {
+    return {
+      hitNumbers: this.currentNumbers,
+      suggestNumber: this.suggestNumber,
+    };
+  }
+
+  private get suggestNumber(): number {
+    if (this.currentNumbers.size === 21) {
+      return 21;
+    }
+    const dartsRest =
+      this.totalRound * 3 -
+      (this.currentRoundIndex * 3 + this.currentThrowIndex);
+    const areaRest = Array.from(new Array(21))
+      .map((_x, index) => index + 1)
+      .filter(x => !this.currentNumbers.has(x));
+    areaRest.sort(
+      (a, b) =>
+        (a === BULL_INDEX ? 50 : a * 3) - (b === BULL_INDEX ? 50 : b * 3)
+    );
+    const index = Math.max(0, areaRest.length - dartsRest);
+    return areaRest[index];
   }
 
   private get vbPlayingLeftContent(): Partial<PlayingLeftContent> {
@@ -111,11 +150,31 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
         if (this.dialog) this.dialog.hide();
       },
       onChangeRound: (nextRound, nextPlayer) => {
+        this.openAreas.splice(nextPlayer - 1, 1, this.currentOpenAreas);
+        this.currentOpenAreas = this.openAreas[nextPlayer];
+
+        this.hitNumbers.splice(nextPlayer - 1, 1, this.currentNumbers);
+        this.currentNumbers = this.hitNumbers[nextPlayer];
+
         this.points.splice(nextPlayer - 1, 1, this.roundPoints);
         this.roundPoints = [...this.points[nextPlayer]];
       },
       onSingleBull: (key: string) => {
-        const currentPoint = this.roundPoints[this.currentRoundIndex] + 50;
+        if (
+          this.currentNumbers.size !== 21 &&
+          this.currentNumbers.has(BULL_INDEX)
+        ) {
+          return {
+            sound: soundMissShot,
+            result: key,
+          };
+        }
+
+        const currentPoint =
+          this.roundPoints[this.currentRoundIndex] + 50 * this.currentOpenAreas;
+        this.currentNumbers.add(BULL_INDEX);
+        this.currentNumbers = new Set(this.currentNumbers);
+        if (this.currentOpenAreas !== 21) this.currentOpenAreas++;
         this.roundPoints.splice(this.currentRoundIndex, 1, currentPoint);
         this.points.splice(this.currentPlayerIndex, 1, [...this.roundPoints]);
         return {
@@ -124,7 +183,21 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
         };
       },
       onDoubleBull: (key: string) => {
-        const currentPoint = this.roundPoints[this.currentRoundIndex] + 50;
+        if (
+          this.currentNumbers.size !== 21 &&
+          this.currentNumbers.has(BULL_INDEX)
+        ) {
+          return {
+            sound: soundMissShot,
+            result: key,
+          };
+        }
+
+        const currentPoint =
+          this.roundPoints[this.currentRoundIndex] + 50 * this.currentOpenAreas;
+        this.currentNumbers.add(BULL_INDEX);
+        this.currentNumbers = new Set(this.currentNumbers);
+        if (this.currentOpenAreas !== 21) this.currentOpenAreas++;
         this.roundPoints.splice(this.currentRoundIndex, 1, currentPoint);
         this.points.splice(this.currentPlayerIndex, 1, [...this.roundPoints]);
         return {
@@ -133,7 +206,19 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
         };
       },
       onInnerSingle: (key: string, point: number) => {
-        const currentPoint = this.roundPoints[this.currentRoundIndex] + point;
+        if (this.currentNumbers.has(point)) {
+          return {
+            sound: soundMissShot,
+            result: key,
+          };
+        }
+
+        const currentPoint =
+          this.roundPoints[this.currentRoundIndex] +
+          point * this.currentOpenAreas;
+        this.currentNumbers.add(point);
+        this.currentNumbers = new Set(this.currentNumbers);
+        if (this.currentOpenAreas !== 21) this.currentOpenAreas++;
         this.roundPoints.splice(this.currentRoundIndex, 1, currentPoint);
         this.points.splice(this.currentPlayerIndex, 1, [...this.roundPoints]);
         return {
@@ -142,7 +227,19 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
         };
       },
       onOuterSingle: (key: string, point: number) => {
-        const currentPoint = this.roundPoints[this.currentRoundIndex] + point;
+        if (this.currentNumbers.has(point)) {
+          return {
+            sound: soundMissShot,
+            result: key,
+          };
+        }
+
+        const currentPoint =
+          this.roundPoints[this.currentRoundIndex] +
+          point * this.currentOpenAreas;
+        this.currentNumbers.add(point);
+        this.currentNumbers = new Set(this.currentNumbers);
+        if (this.currentOpenAreas !== 21) this.currentOpenAreas++;
         this.roundPoints.splice(this.currentRoundIndex, 1, currentPoint);
         this.points.splice(this.currentPlayerIndex, 1, [...this.roundPoints]);
         return {
@@ -151,8 +248,19 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
         };
       },
       onDouble: (key: string, point: number) => {
+        if (this.currentNumbers.has(point)) {
+          return {
+            sound: soundMissShot,
+            result: key,
+          };
+        }
+
         const currentPoint =
-          this.roundPoints[this.currentRoundIndex] + point * 2;
+          this.roundPoints[this.currentRoundIndex] +
+          point * 2 * this.currentOpenAreas;
+        this.currentNumbers.add(point);
+        this.currentNumbers = new Set(this.currentNumbers);
+        if (this.currentOpenAreas !== 21) this.currentOpenAreas++;
         this.roundPoints.splice(this.currentRoundIndex, 1, currentPoint);
         this.points.splice(this.currentPlayerIndex, 1, [...this.roundPoints]);
         return {
@@ -163,8 +271,19 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
         };
       },
       onTriple: (key: string, point: number) => {
+        if (this.currentNumbers.has(point)) {
+          return {
+            sound: soundMissShot,
+            result: key,
+          };
+        }
+
         const currentPoint =
-          this.roundPoints[this.currentRoundIndex] + point * 3;
+          this.roundPoints[this.currentRoundIndex] +
+          point * 3 * this.currentOpenAreas;
+        this.currentNumbers.add(point);
+        this.currentNumbers = new Set(this.currentNumbers);
+        if (this.currentOpenAreas !== 21) this.currentOpenAreas++;
         this.roundPoints.splice(this.currentRoundIndex, 1, currentPoint);
         this.points.splice(this.currentPlayerIndex, 1, [...this.roundPoints]);
         return {
@@ -197,6 +316,9 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
     flex: 1;
     justify-content: center;
     font-size: 15em;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
   }
 }
 </style>
