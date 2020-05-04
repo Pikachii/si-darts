@@ -1,7 +1,7 @@
 <template>
   <si-card v-bind="vbCard">
     <i class="el-icon-user-solid"></i>
-    {{ playerName }}
+    <span class="player-name">{{ playerName }}</span>
   </si-card>
 </template>
 <script lang="ts">
@@ -28,3 +28,8 @@ export default class SiPlayerCard extends Vue {
   }
 }
 </script>
+<style lang="scss" scoped>
+.player-name {
+  font-size: 1.5em;
+}
+</style>

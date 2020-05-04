@@ -2,14 +2,14 @@
   <si-card v-bind="vbCard">
     <template #header>
       <i class="el-icon-user-solid"></i>
-      {{ playerName }}
+      <span class="player-name">{{ playerName }}</span>
       <i
         v-if="isTop"
         class="el-icon-star-on"
         style="margin-left: 10px; color: orange;"
       ></i>
     </template>
-    {{ point }}
+    <span class="point">{{ point }}</span>
   </si-card>
 </template>
 <script lang="ts">
@@ -40,3 +40,11 @@ export default class SiPlayerCardWithPoint extends Vue {
   }
 }
 </script>
+<style lang="scss" scoped>
+.player-name {
+  font-size: 1.5em;
+}
+.point {
+  font-size: 3em;
+}
+</style>

@@ -1,4 +1,5 @@
 import SiCricketNumbers from './molecules/SiCricketNumbers.vue';
+import SiDartsBoard from './molecules/SiDartsBoard.vue';
 import SiGameDescription from './molecules/SiGameDescription.vue';
 import SiImageLink from './molecules/SiImageLink.vue';
 import SiMenuItemGroup from './molecules/SiMenuItemGroup.vue';
@@ -12,6 +13,7 @@ import SiSubMenu from './molecules/SiSubMenu.vue';
 
 export {
   SiCricketNumbers,
+  SiDartsBoard,
   SiGameDescription,
   SiImageLink,
   SiMenuItemGroup,

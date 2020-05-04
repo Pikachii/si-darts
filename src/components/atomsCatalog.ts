@@ -1,8 +1,10 @@
 import SiButton from './atoms/SiButton.vue';
 import SiBlock from './atoms/SiBlock.vue';
+import SiBullArea from './atoms/SiBullArea.vue';
 import SiCard from './atoms/SiCard.vue';
 import SiCricketMark from './atoms/SiCricketMark.vue';
 import SiCricketNumber from './atoms/SiCricketNumber.vue';
+import SiDartsArea from './atoms/SiDartsArea.vue';
 import SiDialog from './atoms/SiDialog.vue';
 import SiImage from './atoms/SiImage.vue';
 import SiMenuItem from './atoms/SiMenuItem.vue';
@@ -16,10 +18,12 @@ import SiText from './atoms/SiText.vue';
 
 export {
   SiButton,
+  SiBullArea,
   SiBlock,
   SiCard,
   SiCricketMark,
   SiCricketNumber,
+  SiDartsArea,
   SiDialog,
   SiImage,
   SiMenuItem,

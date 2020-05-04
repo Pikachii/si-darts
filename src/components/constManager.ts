@@ -3,6 +3,8 @@ import {
   SiSubMenuOption,
 } from '~/components/interfaceManager';
 
+export const BULL_INDEX = 21;
+
 export const keyBind: { [key: string]: string } = {
   1: 'Double 20',
   q: 'Single 20 Outer',
@@ -105,6 +107,14 @@ export const menu: {
           'cricket-count-up': {
             title: 'Cricket Count Up',
             disabled: true,
+          },
+        },
+      },
+      Other: {
+        title: 'Other',
+        menuItems: {
+          'shoot-out': {
+            title: 'Shoot Out',
           },
         },
       },

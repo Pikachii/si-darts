@@ -77,3 +77,20 @@ export interface DartResultProperty {
   readonly isNextTurn?: boolean;
   readonly isEnd?: boolean;
 }
+
+export interface AreaInfo {
+  readonly number: number;
+  readonly startRadian: number;
+  doubleColor: string;
+  outerColor: string;
+  tripleColor: string;
+  innerColor: string;
+}
+
+export interface AreaColorInfo {
+  number: number;
+  doubleColor?: string;
+  outerColor?: string;
+  tripleColor?: string;
+  innerColor?: string;
+}

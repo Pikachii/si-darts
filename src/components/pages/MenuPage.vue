@@ -11,7 +11,7 @@
       />
       <game-start v-else v-bind="vbGameStart" @next="toPlaying" />
     </div>
-    <div style="height: 50px;">
+    <div style="height: 55px;">
       <player-card-list v-bind="vbPlayerCardList" />
     </div>
   </div>

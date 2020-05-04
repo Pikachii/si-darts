@@ -6,6 +6,7 @@ import { Component, mixins } from 'nuxt-property-decorator';
 
 import BasePage from '~/components/pages/ContainerBase/PlayingBasePage';
 import PlayingPage from '~/components/pages/Cricket/PlayingPage.vue';
+import { BULL_INDEX } from '~/components/constManager';
 
 @Component({
   layout: 'playing',
@@ -15,7 +16,7 @@ export default class extends mixins<BasePage>(BasePage) {
   private cricketNumbers: number[] = [];
 
   public created() {
-    const arr = Array.from(Array(21)).map((_x, index) => index + 1);
+    const arr = Array.from(Array(BULL_INDEX)).map((_x, index) => index + 1);
     let a = arr.length;
     // シャッフルアルゴリズム
     while (a) {

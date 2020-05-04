@@ -6,6 +6,7 @@ import { Component, mixins } from 'nuxt-property-decorator';
 
 import BasePage from '~/components/pages/ContainerBase/PlayingBasePage';
 import PlayingPage from '~/components/pages/Cricket/PlayingPage.vue';
+import { BULL_INDEX } from '~/components/constManager';
 
 @Component({
   layout: 'playing',
@@ -26,7 +27,7 @@ export default class extends mixins<BasePage>(BasePage) {
     }
 
     // Bullは必ず最後に設定する
-    this.cricketNumbers = [...arr.slice(0, 6)].concat([21]);
+    this.cricketNumbers = [...arr.slice(0, 6)].concat([BULL_INDEX]);
     this.cricketNumbers.sort((a, b) => a - b);
   }
 
