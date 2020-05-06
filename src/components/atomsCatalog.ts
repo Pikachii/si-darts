@@ -4,6 +4,7 @@ import SiBullArea from './atoms/SiBullArea.vue';
 import SiCard from './atoms/SiCard.vue';
 import SiCricketMark from './atoms/SiCricketMark.vue';
 import SiCricketNumber from './atoms/SiCricketNumber.vue';
+import SiCricketRoundScore from './atoms/SiCricketRoundScore.vue';
 import SiDartsArea from './atoms/SiDartsArea.vue';
 import SiDialog from './atoms/SiDialog.vue';
 import SiImage from './atoms/SiImage.vue';
@@ -23,6 +24,7 @@ export {
   SiCard,
   SiCricketMark,
   SiCricketNumber,
+  SiCricketRoundScore,
   SiDartsArea,
   SiDialog,
   SiImage,

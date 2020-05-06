@@ -10,7 +10,7 @@ import { BULL_INDEX } from '~/components/constManager';
 
 @Component({ components: { SiDartsBoard } })
 export default class ShootOutDartsBoard extends Vue {
-  @Prop({ default: 0 })
+  @Prop({ default: () => new Set<number>() })
   public readonly hitNumbers!: Set<number>;
   @Prop({ default: 0 })
   public readonly suggestNumber!: number;

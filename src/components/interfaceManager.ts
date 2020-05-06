@@ -57,6 +57,11 @@ export interface RoundMultiInfo {
   points: string[];
 }
 
+export interface CricketRoundInfo {
+  cricketNumber: string;
+  point: string;
+}
+
 export interface KeyDownCallbacks {
   readonly showDialog: () => void;
   readonly hideDialog: () => void;
