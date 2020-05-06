@@ -9,7 +9,11 @@ import { Component, Vue, Prop } from 'nuxt-property-decorator';
 
 import { SiBlock } from '~/components/atomsCatalog';
 import { SiRound } from '~/components/moleculesCatalog';
-import { RoundInfo, RoundMultiInfo } from '~/components/interfaceManager';
+import {
+  CricketRoundInfo,
+  RoundInfo,
+  RoundMultiInfo,
+} from '~/components/interfaceManager';
 
 @Component({ components: { SiBlock, SiRound } })
 export default class PlayingLeftContent extends Vue {
@@ -26,7 +30,10 @@ export default class PlayingLeftContent extends Vue {
   public readonly color!: string;
 
   @Prop({ default: '' })
-  public readonly roundItems!: RoundInfo[] | RoundMultiInfo[];
+  public readonly roundItems!:
+    | RoundInfo[]
+    | RoundMultiInfo[]
+    | CricketRoundInfo[];
 
   private get vbBlock(): Partial<SiBlock> {
     return {

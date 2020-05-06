@@ -106,7 +106,6 @@ export const menu: {
           },
           'cricket-count-up': {
             title: 'Cricket Count Up',
-            disabled: true,
           },
         },
       },

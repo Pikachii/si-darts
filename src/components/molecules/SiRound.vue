@@ -4,7 +4,14 @@
       Round {{ currentRound }} / {{ totalRound }}
     </div>
     <div v-for="item in displayRoundMarks" :key="item.round">
-      <si-round-score v-if="isRoundInfo(item)" v-bind="vbRoundScore(item)" />
+      <si-cricket-round-score
+        v-if="isCricketRoundInfo(item)"
+        v-bind="vbCricketRoundScore(item)"
+      />
+      <si-round-score
+        v-else-if="isRoundInfo(item)"
+        v-bind="vbRoundScore(item)"
+      />
       <si-round-three-score v-else v-bind="vbRoundThreeScore(item)" />
     </div>
   </el-row>
@@ -12,11 +19,20 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'nuxt-property-decorator';
 
-import { SiRoundScore, SiRoundThreeScore } from '~/components/atomsCatalog';
-import { RoundInfo, RoundMultiInfo } from '~/components/interfaceManager';
+import {
+  SiCricketRoundScore,
+  SiRoundScore,
+  SiRoundThreeScore,
+} from '~/components/atomsCatalog';
+import {
+  CricketRoundInfo,
+  RoundInfo,
+  RoundMultiInfo,
+} from '~/components/interfaceManager';
 
 @Component({
   components: {
+    SiCricketRoundScore,
     SiRoundScore,
     SiRoundThreeScore,
   },
@@ -32,9 +48,15 @@ export default class SiRound extends Vue {
   public readonly color!: string;
 
   @Prop({ default: '' })
-  public readonly roundItems!: RoundInfo[] | RoundMultiInfo[];
+  public readonly roundItems!:
+    | RoundInfo[]
+    | RoundMultiInfo[]
+    | CricketRoundInfo[];
 
-  private get displayRoundMarks(): RoundInfo[] | RoundMultiInfo[] {
+  private get displayRoundMarks():
+    | RoundInfo[]
+    | RoundMultiInfo[]
+    | CricketRoundInfo[] {
     if (this.totalRound <= 8) return this.roundItems;
 
     if (this.isRoundInfoArray(this.roundItems)) {
@@ -43,6 +65,8 @@ export default class SiRound extends Vue {
           ? x.round <= 8
           : x.round >= this.currentRound - 7 && x.round <= this.currentRound
       );
+    } else if (this.isCricketRoundInfoArray(this.roundItems)) {
+      return this.roundItems;
     } else {
       return this.roundItems.filter(x =>
         this.currentRound <= 8
@@ -60,9 +84,27 @@ export default class SiRound extends Vue {
     return typeof x.point === 'string';
   }
 
+  private isCricketRoundInfoArray(x: any): x is CricketRoundInfo[] {
+    return typeof x[0].cricketNumber === 'string';
+  }
+
+  private isCricketRoundInfo(x: any): x is CricketRoundInfo {
+    return typeof x.cricketNumber === 'string';
+  }
+
   private vbRoundScore(item: RoundInfo): Partial<SiRoundScore> {
     return {
       round: item.round,
+      point: item.point,
+      color: this.color,
+    };
+  }
+
+  private vbCricketRoundScore(
+    item: CricketRoundInfo
+  ): Partial<SiCricketRoundScore> {
+    return {
+      cricketNumber: item.cricketNumber,
       point: item.point,
       color: this.color,
     };
