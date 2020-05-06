@@ -6,6 +6,7 @@ import img1101 from './img/1101.png';
 import img1501 from './img/1501.png';
 import imgBackground from './img/background.jpg';
 import imgCountUp from './img/count-up.png';
+import imgCricketCountUp from './img/cricket-count-up.png';
 import imgHiddenCricket from './img/hidden-cricket.png';
 import imgLogo from './img/logo.png';
 import imgRandomNumberCricket from './img/randam-number-cricket.png';
@@ -21,6 +22,7 @@ export {
   img1501,
   imgBackground,
   imgCountUp,
+  imgCricketCountUp,
   imgHiddenCricket,
   imgLogo,
   imgRandomNumberCricket,
