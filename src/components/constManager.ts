@@ -2,10 +2,13 @@ import {
   SiMenuItemOption,
   SiSubMenuOption,
 } from '~/components/interfaceManager';
+import keyConfig from '~/assets/keyConfig.json';
 
 export const BULL_INDEX = 21;
 
-export const keyBind: { [key: string]: string } = {
+export const keyBind: {
+  [key: string]: string;
+} = keyConfig || {
   1: 'Double 1',
   q: 'Single 1 Outer',
   a: 'Triple 1',
