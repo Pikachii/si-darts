@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="text-align: center; border-right: solid 1px #e6e6e6;">
+    <div style="text-align: center; border-right: solid 1px #e6e6e6">
       <si-image-link v-bind="vbImage" v-on="voImage" />
     </div>
     <si-menu v-bind="vbMenu" v-on="voMenu" />

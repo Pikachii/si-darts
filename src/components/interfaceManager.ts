@@ -62,6 +62,15 @@ export interface CricketRoundInfo {
   point: string;
 }
 
+export interface DartResultProperty {
+  readonly sound: any;
+  readonly soundTimes?: number;
+  readonly soundSpanMs?: number;
+  readonly result: string;
+  readonly isNextTurn?: boolean;
+  readonly isEnd?: boolean;
+}
+
 export interface KeyDownCallbacks {
   readonly showDialog: () => void;
   readonly hideDialog: () => void;
@@ -72,15 +81,6 @@ export interface KeyDownCallbacks {
   readonly onDouble: (key: string, point: number) => DartResultProperty;
   readonly onOuterSingle: (key: string, point: number) => DartResultProperty;
   readonly onInnerSingle: (key: string, point: number) => DartResultProperty;
-}
-
-export interface DartResultProperty {
-  readonly sound: any;
-  readonly soundTimes?: number;
-  readonly soundSpanMs?: number;
-  readonly result: string;
-  readonly isNextTurn?: boolean;
-  readonly isEnd?: boolean;
 }
 
 export interface AreaInfo {

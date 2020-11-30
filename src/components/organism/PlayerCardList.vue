@@ -1,5 +1,5 @@
 <template>
-  <div style="display: flex;">
+  <div style="display: flex">
     <si-player-card v-for="n of playerNum" :key="n" v-bind="vbPlayerCard(n)" />
   </div>
 </template>

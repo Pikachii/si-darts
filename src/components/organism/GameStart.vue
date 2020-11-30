@@ -1,9 +1,9 @@
 <template>
   <div>
     <si-game-description v-bind="vbGameDescription" />
-    <div style="margin-top: 20px; height: 60px;"></div>
-    <div style="text-align: center; margin-top: 20px;">
-      <si-button style="width: 100px;" v-bind="vbButton" @click="clicked" />
+    <div style="margin-top: 20px; height: 60px"></div>
+    <div style="text-align: center; margin-top: 20px">
+      <si-button style="width: 100px" v-bind="vbButton" @click="clicked" />
     </div>
   </div>
 </template>

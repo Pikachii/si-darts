@@ -3,7 +3,7 @@
     <template #title>
       <slot name="title" />
     </template>
-    <template>
+    <template #content>
       <slot />
     </template>
     <template #footer>

@@ -1,7 +1,7 @@
 <template>
   <el-row>
     <si-block v-bind="vbBlock" />
-    <si-round v-bind="vbRound" style="margin-top: 5px;" />
+    <si-round v-bind="vbRound" style="margin-top: 5px" />
   </el-row>
 </template>
 <script lang="ts">

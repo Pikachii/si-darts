@@ -1,11 +1,11 @@
 <template>
   <div>
     <si-game-description v-bind="vbGameDescription" />
-    <div style="text-align: center; margin-top: 20px; height: 60px;">
+    <div style="text-align: center; margin-top: 20px; height: 60px">
       <si-radio-group v-model="vmRadioGroup" v-bind="vbRadioGroup" />
     </div>
-    <div style="text-align: center; margin-top: 20px;">
-      <si-button style="width: 100px;" v-bind="vbButton" @click="clicked" />
+    <div style="text-align: center; margin-top: 20px">
+      <si-button style="width: 100px" v-bind="vbButton" @click="clicked" />
     </div>
   </div>
 </template>

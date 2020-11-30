@@ -6,7 +6,7 @@
       <i
         v-if="isTop"
         class="el-icon-star-on"
-        style="margin-left: 10px; color: orange;"
+        style="margin-left: 10px; color: orange"
       ></i>
     </template>
     <span class="point">{{ point }}</span>

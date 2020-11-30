@@ -1,6 +1,6 @@
 <template>
   <div id="menu-main-content">
-    <si-steps style="width: 100%;" v-bind="vbSteps" />
+    <si-steps style="width: 100%" v-bind="vbSteps" />
     <div id="content">
       <game-menu v-if="index === 0" v-bind="vbGameMenu" @next="next" />
       <player-select
@@ -11,7 +11,7 @@
       />
       <game-start v-else v-bind="vbGameStart" @next="toPlaying" />
     </div>
-    <div style="height: 55px;">
+    <div style="height: 55px">
       <player-card-list v-bind="vbPlayerCardList" />
     </div>
   </div>

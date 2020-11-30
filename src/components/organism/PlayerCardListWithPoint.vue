@@ -1,5 +1,5 @@
 <template>
-  <div style="display: flex;">
+  <div style="display: flex">
     <si-player-card-with-point
       v-for="(point, index) in points"
       :key="index"

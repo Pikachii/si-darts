@@ -7,7 +7,7 @@
       <el-col :span="16">
         <div class="center-content">
           <div class="content">
-            <div style="font-size: 0.25em;">Now ×{{ currentOpenAreas }}</div>
+            <div style="font-size: 0.25em">Now ×{{ currentOpenAreas }}</div>
             <shoot-out-darts-board v-bind="vbShootOutDartsBoard" />
           </div>
           <player-card-list-with-point v-bind="vbPlayerCardListWithPoint" />

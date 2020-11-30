@@ -3,7 +3,7 @@
     <div class="inline">
       <si-image :img-src="imgSrc" :width="300" height="auto" />
     </div>
-    <div class="inline" style="width: 300px;">
+    <div class="inline" style="width: 300px">
       <si-title :label="titleLabel" />
       <el-divider />
       <si-text :text="description" />

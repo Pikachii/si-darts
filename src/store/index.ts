@@ -1,5 +1,9 @@
 import { GetterTree, MutationTree } from 'vuex';
 
+class IndexState {
+  playerNum: number = 0;
+}
+
 export const state: () => IndexState = () => new IndexState();
 
 export const getters: GetterTree<IndexState, IndexState> = {
@@ -11,7 +15,3 @@ export const mutations: MutationTree<IndexState> = {
     state.playerNum = payload;
   },
 };
-
-class IndexState {
-  playerNum: number = 0;
-}
