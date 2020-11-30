@@ -1,7 +1,7 @@
-import { Configuration } from '@nuxt/types';
+import { NuxtConfig } from '@nuxt/types';
 
-const config: Configuration = {
-  mode: 'spa',
+const config: NuxtConfig = {
+  ssr: false,
   head: {
     title: process.env.npm_package_name || '',
     meta: [

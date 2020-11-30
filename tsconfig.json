@@ -17,7 +17,8 @@
       "@/*": ["./src/*"]
     },
     "types": ["@types/node", "@nuxt/types"],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "resolveJsonModule": true
   },
   "exclude": [".nuxt", "dist", "node_modules", "src/static"]
 }
