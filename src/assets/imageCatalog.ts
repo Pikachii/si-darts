@@ -9,7 +9,7 @@ import imgCountUp from './img/count-up.png';
 import imgCricketCountUp from './img/cricket-count-up.png';
 import imgHiddenCricket from './img/hidden-cricket.png';
 import imgLogo from './img/logo.png';
-import imgRandomNumberCricket from './img/randam-number-cricket.png';
+import imgRandomNumberCricket from './img/random-number-cricket.png';
 import imgShootOut from './img/shoot-out.png';
 import imgStandardCricket from './img/standard-cricket.png';
 
