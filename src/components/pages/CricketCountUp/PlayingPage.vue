@@ -7,7 +7,7 @@
       <el-col :span="16">
         <div class="center-content">
           <div class="content">
-            <div style="font-size: 0.25em;">
+            <div style="font-size: 0.25em">
               Shoot At {{ shootCricketNumber }}
             </div>
             <cricket-count-up-darts-board v-bind="vbCricketCountUpDartsBoard" />

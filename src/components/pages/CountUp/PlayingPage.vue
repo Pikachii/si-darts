@@ -6,6 +6,7 @@
       </el-col>
       <el-col :span="16">
         <div class="center-content">
+          <si-point-prediction v-bind="vbPointPrediction" />
           <div class="content">{{ totalPoint }}</div>
           <player-card-list-with-point v-bind="vbPlayerCardListWithPoint" />
         </div>
@@ -21,7 +22,7 @@
 <script lang="ts">
 import { Component, mixins, Ref } from 'nuxt-property-decorator';
 
-import { SiRoundThrow } from '~/components/moleculesCatalog';
+import { SiPointPrediction, SiRoundThrow } from '~/components/moleculesCatalog';
 import BasePage from '~/components/pages/ComponentBase/PlayingBaseComponent';
 import PlayingLeftContent from '~/components/organism/PlayingLeftContent.vue';
 import PlayerCardListWithPoint from '~/components/organism/PlayerCardListWithPoint.vue';
@@ -37,6 +38,7 @@ import {
 
 @Component({
   components: {
+    SiPointPrediction,
     SiRoundThrow,
     PlayerCardListWithPoint,
     PlayerChangeDialog,
@@ -99,6 +101,15 @@ export default class PlayingPage extends mixins<BasePage>(BasePage) {
     return {
       points: this.points.map(x => x.reduce((prev, current) => prev + current)),
       currentPlayer: this.currentPlayer,
+    };
+  }
+
+  private get vbPointPrediction(): Partial<SiPointPrediction> {
+    return {
+      point: this.totalPoint,
+      roundIndex: this.currentRoundIndex,
+      throwIndex: this.currentThrowIndex,
+      totalRound: this.totalRound,
     };
   }
 

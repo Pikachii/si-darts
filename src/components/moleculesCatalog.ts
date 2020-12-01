@@ -10,6 +10,7 @@ import SiRadioGroup from './molecules/SiRadioGroup.vue';
 import SiRound from './molecules/SiRound.vue';
 import SiRoundThrow from './molecules/SiRoundThrow.vue';
 import SiSubMenu from './molecules/SiSubMenu.vue';
+import SiPointPrediction from './molecules/SiPointPrediction.vue';
 
 export {
   SiCricketNumbers,
@@ -20,6 +21,7 @@ export {
   SiPlayerCard,
   SiPlayerCardWithPoint,
   SiPlayerCricketMarks,
+  SiPointPrediction,
   SiRadioGroup,
   SiRound,
   SiRoundThrow,
