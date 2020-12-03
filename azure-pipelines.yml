@@ -1,0 +1,21 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+variables:
+  TmpRepoDir: _repo
+  UserName: Sint-MNishida
+  RepositoryName: si-darts
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- script: |
+     cd /tmp && rm -rf /tmp/$(TmpRepoDir)
+     git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" clone --mirror $(Build.Repository.Uri) $(TmpRepoDir)
+     git -C /tmp/$(TmpRepoDir) push --mirror https://x-access-token:${ACCESS_TOKEN}@github.com/$(UserName)/$(RepositoryName)
+  displayName: 'Copy to github Repos'
