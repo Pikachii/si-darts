@@ -5,7 +5,7 @@
 variables:
   TmpRepoDir: _repo
   UserName: Sint-MNishida
-  RepositoryName: si-darts
+  RepositoryName: si-darts.git
 
 trigger:
 - master
@@ -15,7 +15,7 @@ pool:
 
 steps:
 - script: |
-     cd /tmp && rm -rf /tmp/$(TmpRepoDir)
-     git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" clone --mirror $(Build.Repository.Uri) $(TmpRepoDir)
-     git -C /tmp/$(TmpRepoDir) push --mirror https://x-access-token:${ACCESS_TOKEN}@github.com/$(UserName)/$(RepositoryName)
+      cd /tmp && rm -rf /tmp/$(TmpRepoDir)
+      git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" clone --mirror $(Build.Repository.Uri) $(TmpRepoDir)
+      git -C /tmp/$(TmpRepoDir) push --mirror https://${UserName}:${ACCESS_TOKEN}@github.com/$(UserName)/$(RepositoryName)
   displayName: 'Copy to github Repos'
