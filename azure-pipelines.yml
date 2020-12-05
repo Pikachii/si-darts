@@ -19,17 +19,6 @@ steps:
       git -c http.extraheader="AUTHORIZATION: bearer $(System.AccessToken)" clone --mirror $(Build.Repository.Uri) $(TmpRepoDir)
   displayName: 'clone'
 
-- task: NodeTool@0
-  inputs:
-    versionSpec: '12.x'
-  displayName: 'Install Node.js'
-
-- script: |
-    cd ./client
-    npm install
-    npm run build
-  displayName: 'npm install and build'
-
 - script: |
       git -C /tmp/$(TmpRepoDir) push --mirror https://$(UserName):$(ACCESS_TOKEN)@github.com/$(UserName)/$(RepositoryName)
   displayName: 'Copy to github Repos'
