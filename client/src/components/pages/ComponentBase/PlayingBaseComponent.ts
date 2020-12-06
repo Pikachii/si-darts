@@ -42,6 +42,7 @@ export default class PlayingBaseComponent extends Vue {
   private roundIndex: number = 0;
   private throwIndex: number = 0;
   private playerIndex: number = 0;
+  private readonly KEY_DOWN_INTERVAL_MS = 1000;
 
   public created() {
     if (this.playerNum === 0) this.$router.push('/');
@@ -191,6 +192,8 @@ export default class PlayingBaseComponent extends Vue {
         this.throwIndex++;
       }
     } finally {
+      // 誤動作を防ぐため、キーイベントの復帰にインターバルを設ける
+      await sleep(this.KEY_DOWN_INTERVAL_MS);
       document.addEventListener('keydown', this.keyDownEvent);
     }
   }
