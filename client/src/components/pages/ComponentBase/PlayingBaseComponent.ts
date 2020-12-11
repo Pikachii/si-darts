@@ -118,12 +118,17 @@ export default class PlayingBaseComponent extends Vue {
   }
 
   private async keyDownEvent(e: KeyboardEvent) {
-    document.removeEventListener('keydown', this.keyDownEvent);
     try {
       // Escapeが押された場合は、いかなる場合でもホームに戻る
       if (e.key === 'Escape') {
         this.$router.push('/');
         return;
+      }
+
+      // Shiftのイベントの時はリスナーを消すと後続のキーバインドが反応しないため、
+      // マッピングされたキーが反応した場合のみイベントリスナーを消す
+      if (e.key in keyBind) {
+        document.removeEventListener('keydown', this.keyDownEvent);
       }
 
       const callbacks = this.keyDownCallbacks;
